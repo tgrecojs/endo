@@ -38,6 +38,7 @@ const arrayWithout = (array, value) => {
  */
 const useAsync = (asyncFn, deps) => {
   const [state, setState] = useState();
+
   useEffect(() => {
     setState(undefined);
     let shouldAbort = false;
@@ -66,6 +67,7 @@ const useFollowReducer = (getSubFn, reducerFn, deps) => {
     let shouldAbort = false;
     const iterateChanges = async () => {
       for await (const event of subIterator) {
+        console.log('inside iterate changes::', {event})
         // Check if we should abort iteration
         if (shouldAbort) {
           break;
@@ -137,12 +139,15 @@ const formatChatTime = (date) => {
   return strTime;
 }
 
+const comps = [];
+
 const packageMessageEdgeNameComponent = ({ edgeName, formulaId, setSelectedName, nameIdPairs }) => {
   const matchingPair = nameIdPairs.find(({ id }) => formulaId === id);
   const nameIsKnown = matchingPair !== undefined;
   const nameDisplay = nameIsKnown ? `@${matchingPair.name}` : `?${edgeName}`;
 
-  return (
+
+  const edgeNameCompoent = (
     h('b', {
       onClick: () => setSelectedName(edgeName),
       style: {
@@ -150,6 +155,8 @@ const packageMessageEdgeNameComponent = ({ edgeName, formulaId, setSelectedName,
       },
     }, nameDisplay)
   )
+  console.log({edgeNameCompoent})
+  return {...edgeNameCompoent, key: edgeNameCompoent.props.children[0].toString() }
 };
 
 const packageMessageDisplayComponent = ({ message, setSelectedName, nameIdPairs }) => {

@@ -12,5 +12,5 @@ export const mkhost = async ({
 }) =>
   withEndoParty(partyNames, { os, process }, async ({ party }) => {
     const newHost = await E(party).provideHost(name);
-    console.log(newHost);
+    return newHost
   });

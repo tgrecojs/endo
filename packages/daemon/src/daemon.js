@@ -375,10 +375,17 @@ const makeEndoBootstrap = (
       // eslint-disable-next-line no-use-before-define
       terminator.thisDiesIfThatDies(formula.bundle);
       terminator.thisDiesIfThatDies(formula.powers);
-      return {
+
+      const makeUrlAsync = (formulaNumber, webletPort) => `http://${formulaNumber}.endo.localhost:${webletPort}`
+      
+      const url = `http://${formulaNumber}.endo.localhost:${await webletPortP}`;
+    
+      console.log('url:::', { url, newUrl: await makeUrlAsync(formulaNumber, webletPortP) })
+
+      const webBundle = {
         external: (async () =>
           harden({
-            url: `http://${formulaNumber}.endo.localhost:${await webletPortP}`,
+            url,
             // Behold, recursion:
             // eslint-disable-next-line no-use-before-define
             bundle: provideValueForFormulaIdentifier(formula.bundle),
@@ -388,6 +395,9 @@ const makeEndoBootstrap = (
           }))(),
         internal: undefined,
       };
+
+      console.log('webBundle:::', { webBundle, formula})
+      return webBundle
     } else {
       throw new TypeError(`Invalid formula: ${q(formula)}`);
     }
